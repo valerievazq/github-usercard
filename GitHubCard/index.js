@@ -44,7 +44,10 @@ axios.get("https://api.github.com/users/valerievazq")
 
 //new user cards function
 const newCard = document.querySelector('.cards');
+
   const newUser = () => {
+
+    
     followersArray.forEach(element => {
       axios
         .get(`https://api.github.com/users/${element}`)
@@ -58,9 +61,27 @@ const newCard = document.querySelector('.cards');
     });
   };
 
-newUser();
-})
+//stretch adding followers to cards
+  axios.get("https://api.github.com/users/valerievazq/followers")
+ .then(res => {
+    res.data.forEach(follower => {
+      axios.get(follower.url)
+        .then(followers => {
+          newCard.append(cardCreator(followers.data));
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    });
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
+
+
+    newUser();
+})
 
 
 /* Step 3: Create a function that accepts a single object as its only argument,
